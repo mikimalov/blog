@@ -12,7 +12,7 @@ class ArticlesController < ApplicationController
   end
 
   def create
-    # binding.prygi
+    # binding.pry
     # render plain: params[:article].inspect
     @article = Article.new(article_params)
     if @article.save
