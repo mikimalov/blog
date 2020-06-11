@@ -1,27 +1,47 @@
 <% if article.errors.any? %>
-  <div id="error_explanation">
-    <h2>
-      <%= pluralize(article.errors.count, "error") %> prohibited this article from being saved:
-    </h2>
-
-    <ul>
-      <% article.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-    </ul>
+  <div class="column is-6 is-offset-3">
+    <article class="message is-danger">
+      <div class="message-body">
+        <p><%= pluralize(article.errors.count, "error") %>prohibited this article from being saved:</p>
+        <br>
+        <p><% article.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %></p>
+      </div>
+    </article>
   </div>
 <% end %>
 
-<%= form_with model: article, local: true do |form|%>
-  <p>
-    <%= form.label :title %>
-    <%= form.text_field :title %>
-  </p>
-  <p>
-     <%= form.label :body %>
-     <%= form.text_area :body %>
-  </p>
-  <p>
-     <%= form.submit button_name %>
-  </p>
-<% end %>
+<div class="container">
+  <div class="columns is-multiline">
+    <div class="column is-6 is-offset-3">
+      <div class="content is-size-3">
+        <h1><%= heading %></h1>
+      </div>
+    </div>
+    <div class="column is-6 is-offset-3">
+      <%= form_with model: article, local: true do |form| %>
+        <div class="field">
+          <%= form.label :title, class: "label" %>
+          <div class="control">
+            <%= form.text_field :title, class: "input", placeholder: "Title" %>
+          </div>
+        </div>
+        <div class="field">
+          <%= form.label :body, class: "label" %>
+          <div class="control">
+            <%= form.text_area :body, class: "textarea", placeholder: 'Your body' %>
+          </div>
+        </div>
+        <div class="field is-grouped">
+          <div class="control">
+            <%= form.submit "Submit", class: "button is-link" %>
+          </div>
+          <div class="control">
+            <%= link_to "Cancel", root_path, class: "button is-light" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
