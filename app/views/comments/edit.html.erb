@@ -23,7 +23,7 @@
     <div class="column is-6 is-offset-3">
       <article class="media">
         <div class="media-content">
-          <%= form_with model: [@article, @comment], local: true do |form| %>
+          <%= form_with model: @comment, local: true do |form| %>
             <div class="field">
               <p class="control">
                 <%= form.text_field :commenter, class: "input", placeholder: 'Commenter'%>

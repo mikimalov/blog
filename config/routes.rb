@@ -11,8 +11,11 @@ Rails.application.routes.draw do
   root to: 'articles#index'
 
   resources :articles do
-    resources :comments
+    resources :comments, shallow: true #only: [:new, :create, :index]
   end
+  #resources :comments, only: [:edit, :update, :destroy, :show]
+  get 'users/signup', to: 'users#new'
+  resources :users, except: :new
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

@@ -2,12 +2,9 @@
   <div class="columns is-multiline">
     <div class="column is-6 is-offset-3">
       <div class="content is-size-3">
-        <h1>Articles</h1>
+        <h3><%= @user.name %></h3>
+        <p> <%= @user.email %> </p>
       </div>
     </div>
   </div>
 </div>
-<% @articles.each do |article| %>
-  <%= render article %>
-<% end %>
-
