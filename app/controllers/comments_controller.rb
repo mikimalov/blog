@@ -1,5 +1,6 @@
 class CommentsController < ApplicationController
   def new
+    session_notice('danger', 'Already logged in!') unless logged_in?
     @article = Article.find(params[:article_id])
     @comment = @article.comments.build
   end
@@ -7,6 +8,7 @@ class CommentsController < ApplicationController
   def create
     @article = Article.find(params[:article_id])
     @comment = @article.comments.build(comment_params)
+    @comment.user = current_user
     if @comment.save
       redirect_to @article
     else
@@ -15,7 +17,12 @@ class CommentsController < ApplicationController
   end
 
   def edit
+    session_notice('danger', 'Already logged in!') unless logged_in?
+
     @comment = Comment.find(params[:id])
+    if logged_in?
+      session_notice('danger', 'Wrong user!') unless valid_user?(@comment.user)
+    end
     @article = @comment.article
   end
 
@@ -30,9 +37,14 @@ class CommentsController < ApplicationController
   end
 
   def destroy
+    session_notice('danger', 'Already logged in!') unless logged_in?
     comment = Comment.find(params[:id])
-    comment.destroy
-    redirect_to comment.article
+    if  valid_user?(comment.user)
+      comment.destroy
+      redirect_to comment_path
+     else
+      session_notice('danger', 'Wrong user!')
+     end
   end
 
   private

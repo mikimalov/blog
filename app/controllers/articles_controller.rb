@@ -8,6 +8,7 @@ class ArticlesController < ApplicationController
   end
 
   def new
+    session_notice('danger', 'Already logged in!') unless logged_in?
     @article = Article.new
   end
 
@@ -15,6 +16,7 @@ class ArticlesController < ApplicationController
     # binding.pry
     # render plain: params[:article].inspect
     @article = Article.new(article_params)
+    @article.user = current_user
     if @article.save
       redirect_to @article
     else
@@ -23,7 +25,11 @@ class ArticlesController < ApplicationController
   end
 
   def edit
+    session_notice('danger', 'Already logged in!') unless logged_in?
     @article = Article.find(params[:id])
+    if logged_in?
+      session_notice('danger', 'Wrong user!') unless valid_user?(@article.user)
+    end
   end
 
   def update
@@ -36,11 +42,14 @@ class ArticlesController < ApplicationController
   end
 
   def destroy
+    session_notice('danger', 'Already logged in!') unless logged_in?
     article = Article.find(params[:id])
-    article.destroy
-
-    redirect_to articles_path
-    
+    if  valid_user?(article.user)
+     article.destroy
+     redirect_to articles_path
+    else
+      session_notice('danger', 'Wrong user!')
+    end
   end
 
   private

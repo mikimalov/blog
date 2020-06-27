@@ -24,11 +24,7 @@
       <article class="media">
         <div class="media-content">
           <%= form_with model: [@article, @comment], local: true do |form| %>
-            <div class="field">
-              <p class="control">
-                <%= form.text_field :commenter, class: "input", placeholder: 'Commenter'%>
-              </p>
-            </div>
+            <%# <%= current_user.name %>,s comment %>
             <div class="field">
               <p class="control">
                 <%= form.text_area :body, class: "textarea", placeholder: "Add a comment..." %>
