@@ -41,7 +41,7 @@ class CommentsController < ApplicationController
     comment = Comment.find(params[:id])
     if  valid_user?(comment.user)
       comment.destroy
-      redirect_to comment_path
+      redirect_to comment.article
      else
       session_notice('danger', 'Wrong user!')
      end
@@ -50,6 +50,6 @@ class CommentsController < ApplicationController
   private
 
   def comment_params
-    params.require(:comment).permit(:commenter, :body)
+    params.require(:comment).permit(:body)
   end
 end
