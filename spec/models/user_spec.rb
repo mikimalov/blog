@@ -1,13 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe User do
-  context "when saving" do
-    it "transforms email to downcase" do
-      john = create(:user, email: 'TESTING@TEST.com')
-      expect(john.email).to eq 'testing@test.com'
-    end
-  end
-
   describe "validations " do
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:email) }
@@ -47,6 +40,13 @@ RSpec.describe User do
         create_list(:comment, comments_count, user: user)
         expect {user.destroy}.to change {Comment.count}.by(-comments_count)
       end
+    end
+  end
+  
+  context "when saving" do
+    it "transforms email to downcase" do
+      john = create(:user, email: 'TESTING@TEST.com')
+      expect(john.email).to eq 'testing@test.com'
     end
   end
 end
