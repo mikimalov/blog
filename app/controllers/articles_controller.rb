@@ -1,4 +1,6 @@
 class ArticlesController < ApplicationController
+  # before_action :require_login
+
   def index
     @articles = Article.all
   end
@@ -13,6 +15,9 @@ class ArticlesController < ApplicationController
   end
 
   def create
+    unless logged_in?
+      session_notice('danger', 'You must be logged in!') and return
+     end
     # binding.pry
     # render plain: params[:article].inspect
     @article = Article.new(article_params)
@@ -25,7 +30,10 @@ class ArticlesController < ApplicationController
   end
 
   def edit
-    session_notice('danger', 'Already logged in!') unless logged_in?
+    unless logged_in?
+     session_notice('danger', 'Already logged in!')
+    end
+
     @article = Article.find(params[:id])
     if logged_in?
       session_notice('danger', 'Wrong user!') unless valid_user?(@article.user)
@@ -33,6 +41,10 @@ class ArticlesController < ApplicationController
   end
 
   def update
+    unless logged_in?
+      session_notice('danger', 'You must be logged in!') and return
+     end
+
     @article = Article.find(params[:id])
     if @article.update(article_params)
       redirect_to @article
@@ -42,7 +54,10 @@ class ArticlesController < ApplicationController
   end
 
   def destroy
-    session_notice('danger', 'Already logged in!') unless logged_in?
+    unless logged_in?
+      session_notice('danger', 'You must be logged in!') and return
+    end
+
     article = Article.find(params[:id])
     if  valid_user?(article.user)
      article.destroy

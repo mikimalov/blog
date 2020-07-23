@@ -30,6 +30,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 # Assets
 gem 'font-awesome-sass', '~> 5.13.0'
+gem "clearance"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -57,6 +58,7 @@ group :test do
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'webdrivers'
   gem 'shoulda-matchers', '~> 4.0'
+  gem 'rails-controller-testing'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  # include Clearance::User
+
   MAXIMUM_NAME_LENGTH = 255
   MAXIMUM_EMAIL_LENGTH = 50
   MINIMUM_PASSWORD_LENGTH = 6
@@ -8,7 +10,7 @@ class User < ApplicationRecord
   #dava attr_accessor :password , :password_confirmation argumenti
   # kolona password_digest treba
   #dava metod authenticate, za proverka na passwordot koa ke go vnesuva korisnik
-  
+
   has_many :articles, dependent: :destroy
   has_many :comments, dependent: :destroy
 
