@@ -14,8 +14,8 @@ RSpec.describe "Articles" do
 
         post '/articles', post_params
 
-        expect(response).to redirect_to(root_path)
-        expect(flash[:danger]).to eq 'You must be logged in!'
+        expect(response).to redirect_to(login_path)
+        expect(flash[:danger]).to eq "Please sign in to continue."
       end
     end
   end
@@ -101,14 +101,14 @@ RSpec.describe "Articles" do
   context "when no user is logged in" do
     let(:article) { create(:article) }
 
-    it 'redirect back to root path' do
+    it 'redirect back to login path' do
       get "/articles/#{article.id}/edit"
 
-      expect(flash[:danger]).to eq 'Already logged in!'
-      expect(response).to redirect_to(root_path)
+      expect(flash[:danger]).to eq "Please sign in to continue."
+      expect(response).to redirect_to(login_path)
     end
 
-    it 'redirects back to root when updating' do
+    it 'redirects back to login when updating' do
       patch_params = {
         params: {
           article: {
@@ -120,8 +120,8 @@ RSpec.describe "Articles" do
 
       patch "/articles/#{article.id}", patch_params
 
-      expect(flash[:danger]).to eq 'You must be logged in!'
-      expect(response).to redirect_to(root_path)
+      expect(flash[:danger]).to eq "Please sign in to continue."
+      expect(response).to redirect_to(login_path)
     end
 
   end
@@ -185,11 +185,11 @@ RSpec.describe "Articles" do
     context "when no user is logged in" do
       let(:article) { create(:article) }
 
-      it 'redirect back to root path' do
+      it 'redirect back to login path' do
         delete "/articles/#{article.id}"
 
-        expect(flash[:danger]).to eq 'You must be logged in!'
-        expect(response).to redirect_to(root_path)
+        expect(flash[:danger]).to eq "Please sign in to continue."
+        expect(response).to redirect_to(login_path)
       end
     end
   end

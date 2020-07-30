@@ -1,23 +1,20 @@
 class ArticlesController < ApplicationController
-  # before_action :require_login
+  skip_before_action :require_login, only: [:index, :show]
+  before_action :find_article, except: [:index, :new, :create]
+  before_action :same_user, only: [:edit, :update]
 
   def index
     @articles = Article.all
   end
 
   def show
-    @article = Article.find(params[:id])
   end
 
   def new
-    session_notice('danger', 'Already logged in!') unless logged_in?
     @article = Article.new
   end
 
   def create
-    unless logged_in?
-      session_notice('danger', 'You must be logged in!') and return
-     end
     # binding.pry
     # render plain: params[:article].inspect
     @article = Article.new(article_params)
@@ -30,22 +27,9 @@ class ArticlesController < ApplicationController
   end
 
   def edit
-    unless logged_in?
-     session_notice('danger', 'Already logged in!')
-    end
-
-    @article = Article.find(params[:id])
-    if logged_in?
-      session_notice('danger', 'Wrong user!') unless valid_user?(@article.user)
-    end
   end
 
   def update
-    unless logged_in?
-      session_notice('danger', 'You must be logged in!') and return
-     end
-
-    @article = Article.find(params[:id])
     if @article.update(article_params)
       redirect_to @article
     else
@@ -54,13 +38,8 @@ class ArticlesController < ApplicationController
   end
 
   def destroy
-    unless logged_in?
-      session_notice('danger', 'You must be logged in!') and return
-    end
-
-    article = Article.find(params[:id])
-    if  valid_user?(article.user)
-     article.destroy
+    if valid_user?(@article.user)
+     @article.destroy
      redirect_to articles_path
     else
       session_notice('danger', 'Wrong user!')
@@ -71,5 +50,13 @@ class ArticlesController < ApplicationController
 
   def article_params
     params.require(:article).permit(:title, :body)
+  end
+
+  def find_article
+    @article = Article.find(params[:id])
+  end
+
+  def same_user
+    log_in_as?(@article.user)
   end
 end

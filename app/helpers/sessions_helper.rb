@@ -1,4 +1,5 @@
 module SessionsHelper
+
   def log_in(user)
     session[:user_id] = user.id
   end
@@ -25,5 +26,12 @@ module SessionsHelper
 
   def valid_user?(other_user)
     current_user == other_user
+  end
+
+  def log_in_as?(user)
+    unless valid_user?(user)
+      flash[:danger] = 'Wrong user!'
+      redirect_to root_path and return
+    end
   end
 end

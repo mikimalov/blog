@@ -8,7 +8,10 @@ RSpec.describe "Users" do
     post_params = {
       params: {
         user: {
-          name: 'Mikii', email: 'mikimiki@gmail.com', password: 123456, password_confirmation: 123456
+          name: 'Mikii',
+          email: 'mikimiki@gmail.com',
+          password: 123456,
+          password_confirmation: 123456
         }
       }
     }

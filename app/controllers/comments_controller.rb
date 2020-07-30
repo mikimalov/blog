@@ -1,6 +1,8 @@
 class CommentsController < ApplicationController
+  before_action :find_comment, only: [:edit, :update, :destroy]
+  before_action :correct_user, only: [:edit, :update]
+
   def new
-    session_notice('danger', 'Already logged in!') unless logged_in?
     @article = Article.find(params[:article_id])
     @comment = @article.comments.build
   end
@@ -17,31 +19,24 @@ class CommentsController < ApplicationController
   end
 
   def edit
-    session_notice('danger', 'Already logged in!') unless logged_in?
-
-    @comment = Comment.find(params[:id])
-    if logged_in?
-      session_notice('danger', 'Wrong user!') unless valid_user?(@comment.user)
-    end
     @article = @comment.article
   end
 
   def update
-    @comment = Comment.find(params[:id])
     @article = @comment.article
+
     if @comment.update(comment_params)
-     redirect_to @article
+    redirect_to @article
     else
-     render :edit
+    render :edit
     end
   end
 
   def destroy
-    session_notice('danger', 'Already logged in!') unless logged_in?
-    comment = Comment.find(params[:id])
-    if  valid_user?(comment.user)
-      comment.destroy
-      redirect_to comment.article
+    article = @comment.article
+    if  valid_user?(article.user)
+      @comment.destroy
+      redirect_to @comment.article
      else
       session_notice('danger', 'Wrong user!')
      end
@@ -51,5 +46,14 @@ class CommentsController < ApplicationController
 
   def comment_params
     params.require(:comment).permit(:body)
+  end
+
+  def find_comment
+    @comment = Comment.find(params[:id])
+  end
+
+  def correct_user
+    log_in_as?(@comment.user)
+
   end
 end
